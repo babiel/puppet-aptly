@@ -79,4 +79,9 @@ Puppet::Type.newtype(:aptly_mirror) do
     desc 'when filtering, include dependencies of matching packages as well'
     defaultto :false
   end
+
+  newparam(:with_installer, boolean: false, parent: Puppet::Parameter::Boolean) do
+    desc 'download additional not packaged installer files'
+    defaultto :false
+  end
 end

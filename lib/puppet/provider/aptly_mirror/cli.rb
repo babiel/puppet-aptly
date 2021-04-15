@@ -20,6 +20,7 @@ Puppet::Type.type(:aptly_mirror).provide(:cli) do
         'with-udebs'        => resource[:with_udebs],
         'filter'            => resource[:filter],
         'filter-with-deps'  => resource[:filter_with_deps],
+        'with-installer'    => resource[:with_installer],
       }
     )
 

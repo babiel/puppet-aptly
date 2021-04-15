@@ -14,6 +14,7 @@ define aptly::mirror (
   $with_udebs       = false,
   $filter           = undef,
   $filter_with_deps = false,
+  $with_installer   = false,
 ) {
   validate_string($distribution)
   validate_array(
@@ -23,7 +24,8 @@ define aptly::mirror (
   validate_bool(
     $with_sources,
     $with_udebs,
-    $filter_with_deps
+    $filter_with_deps,
+    $with_installer
   )
   validate_re($location, ['\Ahttps?:\/\/', '\Aftp:\/\/', '\A\/\w+'])
 
@@ -39,5 +41,6 @@ define aptly::mirror (
     with_udebs       => $with_udebs,
     filter           => $filter,
     filter_with_deps => $filter_with_deps,
+    with_installer   => $with_installer,
   }
 }
