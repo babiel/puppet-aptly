@@ -39,7 +39,7 @@ module Puppet_X
         cmd = 'aptly '
         cmd << flags.map do |k, v|
           unless v.equal?(:undef) || v.nil? || v == 'undef'
-            v.to_s == '' ? "-#{k}" : "-#{k}=#{v}".strip
+            v.to_s == '' ? "-#{k}" : "-#{k}='#{v}'".strip
           end
         end.join(' ')
 
