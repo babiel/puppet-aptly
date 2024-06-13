@@ -12,7 +12,7 @@ class aptly::params {
   $repo_keyserver  = 'keys.gnupg.net'
   $repo_key        = 'DF32BC15E2145B3FA151AED19E3E53F19C7DE460'
   $enable_service  = true
-  $port            = '8080'
+  $port            = 8080
   $bind            = '0.0.0.0'
   $config_filepath = '/etc/aptly.conf'
   $user            = 'aptly'
