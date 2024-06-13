@@ -3,77 +3,40 @@
 # Main class. See README.markdown for more documentation.
 #
 class aptly (
-  $version              = $aptly::params::version,
-  $install_repo         = $aptly::params::install_repo,
-  $repo_location        = $aptly::params::repo_location,
-  $repo_release         = $aptly::params::repo_release,
-  $repo_repos           = $aptly::params::repo_repos,
-  $repo_keyserver       = $aptly::params::repo_keyserver,
-  $repo_key             = $aptly::params::repo_key,
-  $enable_service       = $aptly::params::enable_service,
-  $port                 = $aptly::params::port,
-  $bind                 = $aptly::params::bind,
-  $config_filepath      = $aptly::params::config_filepath,
-  $user                 = $aptly::params::user,
-  $uid                  = $aptly::params::uid,
-  $group                = $aptly::params::group,
-  $gid                  = $aptly::params::gid,
-  $root_dir             = $aptly::params::root_dir,
-  $architectures        = $aptly::params::architectures,
-  $ppa_dist             = $aptly::params::ppa_dist,
-  $ppa_codename         = $aptly::params::ppa_codename,
-  $properties           = $aptly::params::properties,
-  $s3_publish_endpoints = $aptly::params::s3_publish_endpoints,
-  $swift_publish_endpoints = $aptly::params::swift_publish_endpoints,
-  $enable_api           = $aptly::params::enable_api,
-  $api_port             = $aptly::params::api_port,
-  $api_bind             = $aptly::params::api_bind,
-  $api_nolock           = $aptly::params::api_nolock,
-  $manage_xz_utils      = $aptly::params::manage_xz_utils,
+  String $version                   = $aptly::params::version,
+  Boolean $install_repo             = $aptly::params::install_repo,
+  String $repo_location             = $aptly::params::repo_location,
+  String $repo_release              = $aptly::params::repo_release,
+  String $repo_repos                = $aptly::params::repo_repos,
+  String $repo_keyserver            = $aptly::params::repo_keyserver,
+  Regexp[/^[A-F0-9]+$/] $repo_key   = $aptly::params::repo_key,
+  Boolean $enable_service           = $aptly::params::enable_service,
+  Integer[default, 49150] $port     = $aptly::params::port,
+  Stdlib::IP::Address $bind         = $aptly::params::bind,
+  String $config_filepath           = $aptly::params::config_filepath,
+  String $user                      = $aptly::params::user,
+  Integer $uid                      = $aptly::params::uid,
+  String $group                     = $aptly::params::group,
+  Integer $gid                      = $aptly::params::gid,
+  String $root_dir                  = $aptly::params::root_dir,
+  Array $architectures              = $aptly::params::architectures,
+  String $ppa_dist                  = $aptly::params::ppa_dist,
+  String $ppa_codename              = $aptly::params::ppa_codename,
+  Hash $properties                  = $aptly::params::properties,
+  Hash $s3_publish_endpoints        = $aptly::params::s3_publish_endpoints,
+  Hash $swift_publish_endpoints     = $aptly::params::swift_publish_endpoints,
+  Boolean $enable_api               = $aptly::params::enable_api,
+  Integer[default, 49150] $api_port = $aptly::params::api_port,
+  Stdlib::IP::Address $api_bind     = $aptly::params::api_bind,
+  Boolean $api_nolock               = $aptly::params::api_nolock,
+  Boolean $manage_xz_utils          = $aptly::params::manage_xz_utils,
 ) inherits aptly::params {
 
-  validate_string(
-    $version,
-    $user,
-    $group,
-    $repo_location,
-    $repo_release,
-    $repo_repos,
-    $repo_keyserver,
-    $config_filepath,
-    $user,
-    $group,
-    $root_dir)
-  if ! is_integer($uid) { fail("invalid ${uid} provided") }
-  if ! is_integer($gid) { fail("invalid ${gid} provided") }
-  validate_re($repo_key, '^[A-F0-9]+$')
-  validate_bool(
-    $install_repo,
-    $enable_service,
-    $enable_api,
-    $api_nolock)
-  validate_array($architectures)
-  validate_hash($properties)
-  validate_hash($s3_publish_endpoints)
-  validate_hash($swift_publish_endpoints)
-  validate_integer($port, 49150)
-  validate_integer($api_port, 49150)
-  validate_re(
-    $bind,
-    '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$',
-    'Aptly Bind IP address is not correct'
-  )
-  validate_re(
-    $api_bind,
-    '^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$',
-    'API Bind IP address is not correct'
-  )
-
-  class { '::aptly::install': } -> class { '::aptly::config':  } ~> class { '::aptly::service': } -> Class['::aptly']
+  class { 'aptly::install': } -> class { 'aptly::config':  } ~> class { 'aptly::service': } -> Class['aptly']
 
   # Ensure Aptly is installed and configured before using it
-  Class['::aptly::config'] -> Aptly::Mirror <| |>
-  Class['::aptly::config'] -> Aptly::Publish <| |>
-  Class['::aptly::config'] -> Aptly::Repo <| |>
-  Class['::aptly::config'] -> Aptly::Snapshot <| |>
+  Class['aptly::config'] -> Aptly::Mirror <| |>
+  Class['aptly::config'] -> Aptly::Publish <| |>
+  Class['aptly::config'] -> Aptly::Repo <| |>
+  Class['aptly::config'] -> Aptly::Snapshot <| |>
 }
