@@ -9,7 +9,7 @@ class aptly (
   String $repo_release              = $aptly::params::repo_release,
   String $repo_repos                = $aptly::params::repo_repos,
   String $repo_keyserver            = $aptly::params::repo_keyserver,
-  Regexp[/^[A-F0-9]+$/] $repo_key   = $aptly::params::repo_key,
+  Pattern[/^[A-F0-9]+$/] $repo_key  = $aptly::params::repo_key,
   Boolean $enable_service           = $aptly::params::enable_service,
   Integer[default, 49150] $port     = $aptly::params::port,
   Stdlib::IP::Address $bind         = $aptly::params::bind,
