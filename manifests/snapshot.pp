@@ -4,16 +4,12 @@
 # It manages APT Mirrors.
 #
 define aptly::snapshot (
-  $source_type,
-  $source_name,
-  $ensure = 'present',
-  $uid    = '450',
-  $gid    = '450',
+  String $source_type,
+  String $source_name,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $ensure = 'present',
+  Integer $uid    = 450,
+  Integer $gid    = 450,
 ) {
-  validate_string(
-    $source_type,
-    $source_name
-  )
 
   aptly_snapshot { $name:
     ensure      => $ensure,
