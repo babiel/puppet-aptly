@@ -3,31 +3,19 @@
 # Manages an apt mirror.
 #
 define aptly::mirror (
-  $location,
-  $ensure           = 'present',
-  $uid              = '450',
-  $gid              = '450',
-  $distribution     = $::lsbdistcodename,
-  $architectures    = [],
-  $components       = [],
-  $with_sources     = false,
-  $with_udebs       = false,
-  $filter           = undef,
-  $filter_with_deps = false,
-  $with_installer   = false,
+  String $location,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $ensure = 'present',
+  Integer $uid                   = 450,
+  Integer $gid                   = 450,
+  String $distribution           = $facts['os']['distro']['codename'],
+  Array $architectures           = [],
+  Array $components              = [],
+  Boolean $with_sources          = false,
+  Boolean $with_udebs            = false,
+  Variant[String, Undef] $filter = undef,
+  Boolean $filter_with_deps      = false,
+  Boolean $with_installer        = false,
 ) {
-  validate_string($distribution)
-  validate_array(
-    $architectures,
-    $components
-  )
-  validate_bool(
-    $with_sources,
-    $with_udebs,
-    $filter_with_deps,
-    $with_installer
-  )
-  validate_re($location, ['\Ahttps?:\/\/', '\Aftp:\/\/', '\A\/\w+'])
 
   aptly_mirror { $name:
     ensure           => $ensure,

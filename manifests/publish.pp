@@ -3,20 +3,15 @@
 # Manages the aptly publications (of repos, mirrors and snapshots)
 #
 define aptly::publish (
-  $source_type,
-  $ensure        = 'present',
-  $uid           = '450',
-  $gid           = '450',
-  $distribution  = "${::lsbdistcodename}-${name}",
-  $prefix        = '.',
-  $architectures = undef,
-  $label         = '',
+  String $source_type,
+  Variant[Enum['present', 'absent', 'purged', 'disabled', 'installed', 'latest'], String[1]] $ensure = 'present',
+  Integer $uid         = 450,
+  Integer $gid         = 450,
+  String $distribution = "${facts['os']['distro']['codename']}-${name}",
+  String $prefix       = '.',
+  Array $architectures = undef,
+  String $label        = '',
 ) {
-  validate_string(
-    $source_type,
-    $distribution,
-    $prefix,
-  )
 
   aptly_publish { $name:
     ensure        => $ensure,

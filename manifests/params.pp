@@ -20,7 +20,7 @@ class aptly::params {
   $group           = 'aptly'
   $gid             = 450
   $root_dir        = '/var/aptly'
-  $architectures   = [$::architecture]
+  $architectures   = [$facts['os']['architecture']]
   $ppa_dist        = 'ubuntu'
   $ppa_codename    = ''
   $properties      = {

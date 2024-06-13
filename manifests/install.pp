@@ -22,7 +22,7 @@ class aptly::install {
   }
 
   # Dealing with package default provider
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       Package { provider => 'apt', }
     }
@@ -30,13 +30,13 @@ class aptly::install {
       # The package has not been tested on other OS.
       # The default provider is needed when specifying
       # a version or latest in $aptly_version
-      warning("Module aptly not tested against ${::operatingsystem}")
+      warning("Module aptly not tested against ${facts['os']['name']}")
     }
   }
 
   # Dealing with specific repo installation
   if $aptly::install_repo == true {
-    case $::osfamily {
+    case $facts['os']['family'] {
       'Debian': {
 
         include '::apt'
@@ -58,7 +58,7 @@ class aptly::install {
         Apt::Source['aptly'] ~> Class['apt::update'] -> Package['aptly']
       }
       default: {
-        fail("Installation of the repository not supported on ${::operatingsystem}")
+        fail("Installation of the repository not supported on ${facts['os']['name']}")
       }
     }
   }
